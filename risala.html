@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Task Management System</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        max-width: 600px;
+        margin: 20px auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+        color: #333;
+        font-size: 24px;
+        margin-top: 0;
+    }
+    input[type="text"] {
+        width: calc(100% - 85px);
+        padding: 10px;
+        border-radius: 5px 0 0 5px;
+        border: 1px solid #ccc;
+        margin-bottom: 10px;
+    }
+    button {
+        padding: 10px 20px;
+        background-color: #4caf50;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    button:hover {
+        background-color: #45a049;
+    }
+    .task-container {
+        border: 1px solid #ccc;
+        padding: 20px;
+        margin-top: 20px;
+        border-radius: 5px;
+    }
+    .task-container div {
+        margin-bottom: 10px;
+    }
+    .completed {
+        color: green;
+    }
+    .delete-btn, .tick-btn {
+        padding: 8px 15px;
+        background-color: #f44336;
+        color: #fff;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    .delete-btn:hover, .tick-btn:hover {
+        background-color: #d32f2f;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>RISALA COMMERCIAL INFORMATION SERVICES</h2>
+    <input type="text" id="textInput" class="textbox" placeholder="Enter a task">
+    <button onclick="showText()">Add Task</button>
+</div>
+
+<div id="anotherPage" style="display:none;">
+    <div class="container">
+        <h2>TO DO LIST</h2>
+        <div id="displayText"></div>
+    </div>
+</div>
+
+<script>
+    window.onload = function() {
+        var storedTasks = JSON.parse(localStorage.getItem('tasks'));
+        if (storedTasks) {
+            document.getElementById("displayText").innerHTML = storedTasks;
+            document.getElementById("anotherPage").style.display = "block";
+        }
+    }
+
+    function showText() {
+        var text = document.getElementById("textInput").value;
+        var displayText = document.createElement("div");
+        displayText.classList.add("task-container");
+        if (text.toLowerCase().includes("offer letter")) {
+            displayText.innerHTML = `
+                <div>${text}</div>
+                <div>
+                    <button class="delete-btn" onclick="deleteText(this)">Delete</button>
+                    <button class="tick-btn" onclick="completeTask(this)">Tick</button>
+                </div>
+                <div><input type="text" placeholder="Offer letter"><button class="delete-btn" onclick="deleteText(this)">Delete</button><button class="tick-btn" onclick="completeTask(this)">Tick</button></div>
+                <div><input type="text" placeholder="Insurance"><button class="delete-btn" onclick="deleteText(this)">Delete</button><button class="tick-btn" onclick="completeTask(this)">Tick</button></div>
+                <div><input type="text" placeholder="Fees Payment"><button class="delete-btn" onclick="deleteText(this)">Delete</button><button class="tick-btn" onclick="completeTask(this)">Tick</button></div>
+                <div><input type="text" placeholder="Entry permit"><button class="delete-btn" onclick="deleteText(this)">Delete</button><button class="tick-btn" onclick="completeTask(this)">Tick</button></div>
+                <div><input type="text" placeholder="Change status"><button class="delete-btn" onclick="deleteText(this)">Delete</button><button class="tick-btn" onclick="completeTask(this)">Tick</button></div>
+                <div><input type="text" placeholder="Tawjeeh"><button class="delete-btn" onclick="deleteText(this)">Delete</button><button class="tick-btn" onclick="completeTask(this)">Tick</button></div>
+                <div><input type="text" placeholder="Contract submission"><button class="delete-btn" onclick="deleteText(this)">Delete</button><button class="tick-btn" onclick="completeTask(this)">Tick</button></div>
+                <div><input type="text" placeholder="Stamping"><button class="delete-btn" onclick="deleteText(this)">Delete</button><button class="tick-btn" onclick="completeTask(this)">Tick</button></div>
+            `;
+        } else if (text.toLowerCase().includes("renew") || text.toLowerCase().includes("renewal")) {
+            displayText.innerHTML = `
+                <div>${text}</div>
+                <div>
+                    <button class="delete-btn" onclick="deleteText(this)">Delete</button>
+                    <button class="tick-btn" onclick="completeTask(this)">Tick</button>
+                </div>
+                <div><input type="text" placeholder="Renew Application"><button class="delete-btn" onclick="deleteText(this)">Delete</button><button class="tick-btn" onclick="completeTask(this)">Tick</button></div>
+                <div><input type="text" placeholder="Insurance"><button class="delete-btn" onclick="deleteText(this)">Delete</button><button class="tick-btn" onclick="completeTask(this)">Tick</button></div>
+                <div><input type="text" placeholder="Tawjeeh"><button class="delete-btn" onclick="deleteText(this)">Delete</button><button class="tick-btn" onclick="completeTask(this)">Tick</button></div>
+                <div><input type="text" placeholder="Contract Submission"><button class="delete-btn" onclick="deleteText(this)">Delete</button><button class="tick-btn" onclick="completeTask(this)">Tick</button></div>
+            `;
+        } else {
+            displayText.innerHTML = `
+                <div>${text}</div>
+                <div>
+                    <button class="delete-btn" onclick="deleteText(this)">Delete</button>
+                    <button class="tick-btn" onclick="completeTask(this)">Tick</button>
+                </div>
+            `;
+        }
+        document.getElementById("anotherPage").style.display = "block";
+        var displayArea = document.getElementById("displayText");
+        // Insert the new task at the beginning
+        displayArea.insertBefore(displayText, displayArea.firstChild);
+
+        // Store tasks in Local Storage
+        localStorage.setItem('tasks', JSON.stringify(displayArea.innerHTML));
+    }
+
+    function deleteText(element) {
+        element.parentNode.parentNode.remove();
+
+        // Update Local Storage after deletion
+        localStorage.setItem('tasks', JSON.stringify(document.getElementById("displayText").innerHTML));
+    }
+
+    function completeTask(element) {
+        var completedText = document.createElement("span");
+        completedText.textContent = "Work completed";
+        completedText.classList.add("completed");
+        element.parentNode.appendChild(completedText);
+        element.style.display = "none"; // Hide the tick button after completion
+
+        // Update Local Storage after completion
+        localStorage.setItem('tasks', JSON.stringify(document.getElementById("displayText").innerHTML));
+    }
+</script>
+
+</body>
+</html>
