@@ -1,43 +1,165 @@
-# Simple workflow for deploying static content to GitHub Pages
-name: Deploy static content to Pages
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Text Box Example</title>
+<style>
+    .container {
+        margin: 20px;
+    }
+    .textbox {
+        margin-bottom: 10px;
+    }
+    .completed {
+        color: green;
+    }
+    .task-container {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-top: 10px;
+    }
+</style>
+</head>
+<body>
 
-on:
-  # Runs on pushes targeting the default branch
-  push:
-    branches: ["main"]
+<div class="container">
+    <h2>Page 1</h2>
+    <input type="text" id="textInput" class="textbox">
+    <button onclick="showText()">Show Text on Another Page</button>
+</div>
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+<div id="anotherPage" style="display:none;">
+    <div class="container">
+        <h2>Page 2</h2>
+        <div id="displayText"></div>
+    </div>
+</div>
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+<script>
+    window.onload = function() {
+        var storedTasks = JSON.parse(localStorage.getItem('tasks'));
+        if (storedTasks) {
+            document.getElementById("displayText").innerHTML = storedTasks;
+            document.getElementById("anotherPage").style.display = "block";
+        }
+    }
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
+    function showText() {
+        var text = document.getElementById("textInput").value;
+        var displayText = document.createElement("div");
+        if (text.toLowerCase().includes("offer letter")) {
+            displayText.innerHTML = '<div class="task-container">' + 
+                '<div>' + text + '</div>' +
+                 '<div>' +
+                    '<button onclick="deleteText(this)">Delete</button>' +
+                    '<button onclick="completeTask(this)">Tick</button>' +
+                '</div>' +
+                '<div>' +
+                    '<input type="text" placeholder="Offer letter">' +
+                    '<button onclick="deleteText(this)">Delete</button>' +
+                    '<button onclick="completeTask(this)">Tick</button>' +
+                '</div>' +
+                '<div>' +
+                    '<input type="text" placeholder="Insurance">' +
+                    '<button onclick="deleteText(this)">Delete</button>' +
+                    '<button onclick="completeTask(this)">Tick</button>' +
+                '</div>' +
+                '<div>' +
+                    '<input type="text" placeholder="Fees Payment">' +
+                    '<button onclick="deleteText(this)">Delete</button>' +
+                    '<button onclick="completeTask(this)">Tick</button>' +
+                '</div>' +
+                '<div>' +
+                    '<input type="text" placeholder="Entry permit">' +
+                    '<button onclick="deleteText(this)">Delete</button>' +
+                    '<button onclick="completeTask(this)">Tick</button>' +
+                '</div>' +
+                '<div>' +
+                    '<input type="text" placeholder="Change status">' +
+                    '<button onclick="deleteText(this)">Delete</button>' +
+                    '<button onclick="completeTask(this)">Tick</button>' +
+                '</div>' +
+                '<div>' +
+                    '<input type="text" placeholder="Tawjeeh">' +
+                    '<button onclick="deleteText(this)">Delete</button>' +
+                    '<button onclick="completeTask(this)">Tick</button>' +
+                '</div>' +
+                '<div>' +
+                    '<input type="text" placeholder="contract submmission">' +
+                    '<button onclick="deleteText(this)">Delete</button>' +
+                    '<button onclick="completeTask(this)">Tick</button>' +
+                '</div>' +
+                '<div>' +
+                    '<input type="text" placeholder="Stamping">' +
+                    '<button onclick="deleteText(this)">Delete</button>' +
+                    '<button onclick="completeTask(this)">Tick</button>' +
+                '</div>' +
+            '</div>';
+        } else if (text.toLowerCase().includes("renew") || text.toLowerCase().includes("renewal")) {
+            displayText.innerHTML = '<div class="task-container">' + 
+                '<div>' + text + '</div>' +
+                '<div>' +
+                    '<button onclick="deleteText(this)">Delete</button>' +
+                    '<button onclick="completeTask(this)">Tick</button>' +
+                '</div>' +
+                '<div>' +
+                    '<input type="text" placeholder="Renew Application">' +
+                    '<button onclick="deleteText(this)">Delete</button>' +
+                    '<button onclick="completeTask(this)">Tick</button>' +
+                '</div>' +
+                '<div>' +
+                    '<input type="text" placeholder="Insurance">' +
+                    '<button onclick="deleteText(this)">Delete</button>' +
+                    '<button onclick="completeTask(this)">Tick</button>' +
+                '</div>' +
+                '<div>' +
+                    '<input type="text" placeholder="Tawjeeh">' +
+                    '<button onclick="deleteText(this)">Delete</button>' +
+                    '<button onclick="completeTask(this)">Tick</button>' +
+                '</div>' +
+                '<div>' +
+                    '<input type="text" placeholder="Contract Submission">' +
+                    '<button onclick="deleteText(this)">Delete</button>' +
+                    '<button onclick="completeTask(this)">Tick</button>' +
+                '</div>' +
+            '</div>';
+        } else {
+            displayText.innerHTML = '<div class="task-container">' + 
+                '<div>' + text + '</div>' +
+                '<div>' +
+                    '<button onclick="deleteText(this)">Delete</button>' +
+                    '<button onclick="completeTask(this)">Tick</button>' +
+                '</div>' +
+            '</div>';
+        }
+        document.getElementById("anotherPage").style.display = "block";
+        var displayArea = document.getElementById("displayText");
+        // Insert the new task at the beginning
+        displayArea.insertBefore(displayText, displayArea.firstChild);
 
-jobs:
-  # Single deploy job since we're just deploying
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          # Upload entire repository
-          path: '.'
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+        // Store tasks in Local Storage
+        localStorage.setItem('tasks', JSON.stringify(displayArea.innerHTML));
+    }
+
+    function deleteText(element) {
+        element.parentNode.parentNode.remove();
+
+        // Update Local Storage after deletion
+        localStorage.setItem('tasks', JSON.stringify(document.getElementById("displayText").innerHTML));
+    }
+
+    function completeTask(element) {
+        var completedText = document.createElement("span");
+        completedText.textContent = "Work completed";
+        completedText.classList.add("completed");
+        element.parentNode.appendChild(completedText);
+        element.style.display = "none"; // Hide the tick button after completion
+
+        // Update Local Storage after completion
+        localStorage.setItem('tasks', JSON.stringify(document.getElementById("displayText").innerHTML));
+    }
+</script>
+
+</body>
+</html>
